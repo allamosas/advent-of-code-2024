@@ -21,6 +21,7 @@ muls = re.findall(regex_sanitize, memory_readings)
 #dejarlas separadas por una coma para realizar el split
 regex_split = r'\d{1,3},\d{1,3}'
 
+#Se recorren todas las coincidencias y se pasan a una lista de enteros
 numbers = []
 for mul in muls:
     new_row = []    #Se crea una nueva fila y se añaden los dos numeros parseados a int

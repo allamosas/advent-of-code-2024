@@ -12,7 +12,7 @@ with open('input', 'r', encoding='utf-8') as puzzle_input:
     memory_readings = puzzle_input.read()
 
 #Regex para detectar 'mul()', 'do()' y "don't'"
-regex_sanitize = r"(do\(\)|mul\(\d+,\d+\)|don't\(\))"
+regex_sanitize = r"(do\(\)|mul\(\d{1,3},\d{1,3}\)|don't\(\))"
 
 #Se buscan todas las coincidencias y se almacenan en match en lugar de findall
 #para poder procesarlo mejor
