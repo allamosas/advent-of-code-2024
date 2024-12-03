@@ -25,13 +25,11 @@ do_flag = True #Se crea un flag para ver si se multiplica el elemento encontrado
 
 #Se procesan las combinaciones válidas que no tengan un don't entremedias
 for i, current in enumerate(matches):
-    print(current)
     if current == 'do()': #Se encuentra un do()
         do_flag = True
         
     elif current == "don't()": #Se encuentra un dont()
         do_flag = False
-        print('False')
         
     else: #Se ha encontrado un mul
         if do_flag: #Si hay luz verde, se marca como valido
