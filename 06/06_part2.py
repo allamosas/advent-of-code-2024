@@ -10,6 +10,7 @@ pos_x = -1
 pos_y = -1
 obstacles_found = []
 infinite_loop = False
+omit_league = [] #Variable por las risas para ver cual es el numero maximo de hits que tiene el guardia. Por ver como de fiable seria hacer fuerza bruta XD
 
 directions = { #El tuto de hoy es de diccionarios. a ver que tal
     0: (0, -1),   # Mover en -y N
@@ -51,12 +52,15 @@ def patrol(pos_x, pos_y, guard_dir):
     
     global infinite_loop
     global obstacles_found
+    global omit_league
+    hits = 0
     obstacles_found = [] #Se reinicia la lista de obstaculos encontrados por el guardia
     
     walk_count = 0 #Esto ya no serviría en esta parte    
     while is_inbounds(pos_x, pos_y): #Se calcula la ruta mientras siga dentro del mapa
         
         if is_obstacle(guard_dir, pos_x, pos_y):
+            hits += 1
             guard_dir = (guard_dir + 1) % len(directions) #Se rota 90 grados a la siguiente direccion
             #Lo que he hecho para que la lista sea circular es usar modulos, 
             #de forma que si la dirección es 3, al calcularlo en mod 4, la 
@@ -70,6 +74,7 @@ def patrol(pos_x, pos_y, guard_dir):
             
         if infinite_loop: #Si el flag del bucle es True, se reinicia y se encuentra un bucle infinito
             infinite_loop = False
+            omit_league.append(hits)
             return True
     return False #Si no, es que se ha salido del mapa
 
@@ -127,7 +132,8 @@ for y, line in enumerate(map): #Se recorre el mapa
         print(f'{int(progress/(map_size[0] * map_size[1]) * 100)}% ({progress}/{len(map) * len(map[0])})') #Progreso de la ejecucion
         progress+=1
         
-print(f'Se han encontrado {loops} bucles infinitos')    
+print(f'Se han encontrado {loops} bucles infinitos') 
+print(f'La run con mas hits se ha llevado {max(omit_league)}')
 
 
         
