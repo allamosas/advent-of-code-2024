@@ -87,42 +87,7 @@ def free_disk(disk):
         print('Se sigue buscando otro bloque')
         if r_iterator + len(disk) <= 0:
             condicion = False
-                    
-        
-    
-    
-    
-    
-    
-    
-    
-    '''
-    while r_iterator + len(disk) > 0:      
-        #Se busca el primer bloque disponible
-        if disk[r_iterator] != '.':
-            block = []
-            block.append(disk[r_iterator])
-            r_iterator -= 1            
-            while block[0] == disk[r_iterator]:
-                block.append(disk[r_iterator])
-                r_iterator -= 1            
             
-            #Se mira donde puede encajar
-            checkpoint = iterator
-            for iterator, char in enumerate(disk):
-                if char == '.':
-                    iterator += 1
-                    if iterator == len(block): #Si se encuentra un hueco:
-                        for i in range (iterator - checkpoint):
-                            #se introduce
-                            freed_disk[checkpoint + i] = block[i]
-                            #freed_disk[r_iterator - i] = '.'
-                else:
-                    iterator = checkpoint
-            
-            #Se pasa al siguiente bloque disponible
-        r_iterator -= 1            
-    '''
     return disk    
     
     
