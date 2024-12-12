@@ -23,7 +23,7 @@ Created on Wed Dec 11 06:09:00 2024
 import time
 import math
 
-blinks = 25
+blinks = 75
 
 def main():
     
@@ -84,7 +84,6 @@ Segunda amortización de estructura de datos
 En lugar de separar los numeros como si fuesen strings, se va a realizar una 
 división modular, el cociente es la parte izquierda y el resto la derecha
 Para calcular el numero de digitos, se hace algo parecido al calculo de digitos pares
-Igual hay que remodelar esa operacion para que se realice una única vez
 '''    
 def split_in_two(stone, digits):
     power = 10 ** (digits // 2)

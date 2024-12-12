@@ -24,7 +24,7 @@ import time
 import math
 import cupy as cp
 
-blinks = 75
+blinks = 25
 cp.set_printoptions(linewidth=200)
 
 def main():
