@@ -28,13 +28,24 @@ explored_tiles = []
 
 directions = {
     0: ( 0, -1),   # Mover en -y N
-    1: ( 1,  0),    # Mover en +x E
-    2: ( 0,  1),    # Mover en +y S
+    1: ( 1,  0),   # Mover en +x E
+    2: ( 0,  1),   # Mover en +y S
     3: (-1,  0)    # Mover en -x W
 }
 
+edge_directions = {
+    0: ( 0, -1),   # Mover en -y N
+    1: ( 1, -1),   # NE
+    2: ( 1,  0),   # Mover en +x E
+    3: ( 1,  1),   # SE
+    4: ( 0,  1),   # Mover en +y S
+    5: (-1,  1),   # SW
+    6: (-1,  0),   # Mover en -x W
+    7: (-1, -1)    # NW
+}
+
 def main():    
-    with open('input.txt', 'r', encoding='utf-8') as puzzle_input:
+    with open('example1.txt', 'r', encoding='utf-8') as puzzle_input:
         for line in puzzle_input:
             grid.append(list(line.strip())) # Se crea una matriz de filas
                                               # evitando introducir el retorno
@@ -43,15 +54,15 @@ def main():
     explored_tiles = copy.deepcopy(grid)
     
     total_price = 0
-    perimeter = 0
+    edges = 0
     area = 0
     for y, row in enumerate(grid):
         for x, tile in enumerate(row):
-            perimeter, area = measure(x, y, grid, explored_tiles)
+            edges, area = measure(x, y, grid, explored_tiles)
             if area!= 0:
-                print(f'El perimetro de {grid[y][x]} es de {perimeter}')      
+                print(f'El nº de lados de {grid[y][x]} es {edges}')      
                 print(f'El area de {grid[y][x]} es de {area}')            
-                total_price += perimeter * area
+                total_price += edges * area
         
     print(f'El coste total del huerto es {total_price} monedas de oro')
            
@@ -59,7 +70,7 @@ def main():
 
 def measure(x, y, grid, explored_tiles, prev_crop = ''):
     crop = grid[y][x]
-    perimeter = 0
+    edges = 0
     area = 0
     
     #Se comprueba que no se ha explorado ya
@@ -72,20 +83,30 @@ def measure(x, y, grid, explored_tiles, prev_crop = ''):
         explored_tiles[y][x] = '.' 
         area += 1
         
+        #En lugar de contar el perimetro, se cuentan las esquinas
+        edges = count_edges(x, y, grid)
         #Se sigue avanzando en todas las direcciones
         for dx, dy in directions.values():
             nx, ny = x+dx, y+dy
-            #Si se sale del mapa o el cultivo no coincide, aumenta el perimetro
-            if not(is_inbounds(nx, ny, grid) and grid[ny][nx] == crop): 
-                perimeter += 1
-                
             if is_inbounds(nx, ny, grid): #Se comprueba que no se sale del mapa
-                r_perimeter, r_area = measure(nx, ny, grid, explored_tiles, crop)
-                perimeter += r_perimeter
+                r_edges, r_area = measure(nx, ny, grid, explored_tiles, crop)
+                edges += r_edges
                 area += r_area
     
-    return perimeter, area
+    return edges, area
 
+def count_edges(x, y, grid):
+    crop = grid[y][x]
+    edges = 0
+    
+    for dx, dy in edge_directions.values():
+        nx, ny = x+dx, y+dy
+        if not(is_inbounds(nx, ny, grid) and grid[ny][nx] == crop): 
+            edges += 1
+    return edges
+            
+        
+    
           
             
 def is_inbounds(pos_x, pos_y, grid):                  

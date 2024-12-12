@@ -20,8 +20,8 @@ Created on Wed Dec 11 06:09:00 2024
 |___,_| \___/ |_____| \___|    |_____||__|\_||__|\_||__|\_||__|\_||__|\_||__|\_||__|\_||__|\_|
 """
 
-import time
 import math
+from functools import cache #SACAMOS LA PUTA DEAGLE
 
 blinks = 75
 
@@ -31,40 +31,32 @@ def main():
         stone_list = list(map(int, puzzle_input.read().split(" ")))
         print(stone_list)
         
-        inicio_bucle = time.time()
-        last = 0
-        for i in range(blinks):
-            inicio = time.time()
-            stone_list = blink(stone_list)
-            fin = time.time()
-            print(f'He pestañeado {i+1} veces y hay {len(stone_list)} piedras ({len(stone_list) - last} más)')
-            last = len(stone_list)
-            print(f'Se ha tardado {round(fin - inicio, 3)}s ')
-            #print(stone_list)
-        fin_bucle = time.time()
-        print(f'Han aparecido {len(stone_list)} piedras en un total de {round(fin_bucle - inicio_bucle, 3)}s!')
+        stone_number = sum(blink(stone, blinks) for stone in stone_list)
+        
+        print(f'Se han contado {stone_number} piedras')
         
         
-def blink(stone_list):
-    i = 0
-    while i < len(stone_list): #Se utiliza un while porque se va a avanzar el iterador a mano
-        stone = stone_list[i]
-        
-        if stone == 0:
-            stone_list[i] = 1
-        else:
-            digits = count_digits(stone)
-            if digits % 2 == 0:
-                #Reemplazar por dos piedras
-                left, right = split_in_two(stone, digits)
-                stone_list[i] = left #Se actualiza la piedra izquierda
-                i += 1 #Se avanza manualmente el puntero a la derecha para no sobreescribir el nuevo item
-                stone_list.insert(i, right) #Se añade la derecha sin variar el resto de la lista
-                
-            else:
-                stone_list[i] = multiplicar_por_2024(stone)
-        i += 1
-    return stone_list
+'''
+Dos cositas
+Lo que te piden no es la lista de piedras, sino el número de piedras que va a haber. Asi que lo que he hecho es una funcion 
+recursiva que cuenta las piedras que van apareciendo y le suda la polla guardarlo en ningun sitio.
+Muchas piedras siguen los mismos patrones, como los 0. Siempre se convierten en 1, el 1 se multiplica por 2024 y el 2024 se divide en 20 y 24
+Con @cache, se guarda ese resultado en la RAM. Si se vuelve a encontrar una función que tenga que calcular 1 * 2024, en lugar de calcularlo, lo
+recoge de la ram, reduciendo DRASTICAMENTE DE COJONES el consumo de recursos. Probablemente se podría haber hecho sin las funciones turboeficientes de abajo
+'''
+@cache
+def blink(stone, blinks):
+    if blinks == 0: #Se termina el bucle
+        return 1 
+    if stone == 0: #Se continua contando 
+        return blink(1, blinks -1)
+    digits = count_digits(stone)
+    if digits % 2 == 0:
+        #Reemplazar por dos piedras
+        left, right = split_in_two(stone, digits)
+        return blink(left, blinks - 1) + blink(right, blinks - 1)
+    else:
+        return blink(multiplicar_por_2024(stone), blinks - 1)
 
 
 
@@ -84,7 +76,7 @@ Segunda amortización de estructura de datos
 En lugar de separar los numeros como si fuesen strings, se va a realizar una 
 división modular, el cociente es la parte izquierda y el resto la derecha
 Para calcular el numero de digitos, se hace algo parecido al calculo de digitos pares
-'''    
+'''  
 def split_in_two(stone, digits):
     power = 10 ** (digits // 2)
     leftie, rightie = divmod(stone, power)

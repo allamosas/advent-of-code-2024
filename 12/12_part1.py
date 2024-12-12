@@ -28,8 +28,8 @@ explored_tiles = []
 
 directions = {
     0: ( 0, -1),   # Mover en -y N
-    1: ( 1,  0),    # Mover en +x E
-    2: ( 0,  1),    # Mover en +y S
+    1: ( 1,  0),   # Mover en +x E
+    2: ( 0,  1),   # Mover en +y S
     3: (-1,  0)    # Mover en -x W
 }
 
