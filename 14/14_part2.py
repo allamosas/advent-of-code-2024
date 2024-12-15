@@ -45,7 +45,7 @@ def find_the_fucking_tree(bot_list):
             pos_x = (pos_x + bot[1][0]*seconds) % width
             pos_y = (pos_y + bot[1][1]*seconds) % height
             grid = write_pos(pos_x, pos_y, grid)
-        print(f"\rSe han comprobado los primeros {seconds}s{' ' * 20}", end='', flush=True)
+        print(f"\rSe han comprobado los primeros {seconds}s{' ' * 20}", end='\r', flush=True)
         seconds += 1
 
     
